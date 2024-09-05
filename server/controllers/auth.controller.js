@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { generatedVerificationToken } from "../utils/generatedVerificationToken.js";
 import { generatedTokenandSetCookie } from "../utils/generatedTokenandSetCookie.js";
+import { sendVerificationEmail } from "../mailtrap/emails.js";
 
 class Controller {
   static async singup(req, res) {
@@ -28,6 +29,8 @@ class Controller {
       await newUser.save();
 
       generatedTokenandSetCookie(newUser._id, res);
+
+      await sendVerificationEmail(newUser.email, verificationToken);
 
       res.status(201).json({
         success: true,
