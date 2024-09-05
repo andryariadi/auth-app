@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import connectToDB from "./db/connectToDB.js";
 import authRoute from "./routes/auth.route.js";
 
@@ -8,13 +9,17 @@ const port = process.env.PORT || 5000;
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello World! bree");
-});
+app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 app.use("/api/auth", authRoute);
 
 app.listen(port, () => {
   connectToDB();
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Server running on port ${port} nih bre!`);
 });
