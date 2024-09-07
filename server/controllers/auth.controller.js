@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { generatedVerificationToken } from "../utils/generatedVerificationToken.js";
 import { generatedTokenandSetCookie } from "../utils/generatedTokenandSetCookie.js";
-import { sendResetPasswordEmail, sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
+import { sendResetPasswordEmail, sendResetPasswordSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
 
 class Controller {
   static async singup(req, res) {
@@ -144,6 +144,37 @@ class Controller {
       await sendResetPasswordEmail(user.email, `${process.env.CLIENT_URL}/${resetToken}`);
 
       res.status(200).json({ success: true, message: "Reset password email sent successfully!" });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ success: false, message: error.message });
+      res.status(500).json({ message: "Internal server error!" });
+    }
+  }
+
+  static async resetPassword(req, res) {
+    const { token } = req.params;
+    const { password } = req.body;
+    try {
+      const user = await User.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpiresAt: { $gt: Date.now() },
+      });
+
+      console.log(user, "<---user");
+
+      if (!user) return res.status(404).json({ success: false, message: "Invalid or expired token!" });
+
+      const hasdPassword = await bcrypt.hash(password, 10);
+
+      user.password = hasdPassword;
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpiresAt = undefined;
+
+      await user.save();
+
+      await sendResetPasswordSuccessEmail(user.email);
+
+      res.status(200).json({ success: true, message: "Password reset successfully!" });
     } catch (error) {
       console.log(error);
       res.status(400).json({ success: false, message: error.message });

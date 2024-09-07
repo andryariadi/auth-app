@@ -13,4 +13,6 @@ router.post("/verify-email", Controller.verifyEmail);
 
 router.post("/forgot-password", Controller.forgotPassword);
 
+router.post("/reset-password/:token", Controller.resetPassword);
+
 export default router;
