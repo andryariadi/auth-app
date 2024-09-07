@@ -7,7 +7,7 @@ router.post("/signup", Controller.singup);
 
 router.post("/login", Controller);
 
-router.post("/logout", Controller);
+router.post("/logout", Controller.logout);
 
 router.post("/verify-email", Controller.verifyEmail);
 

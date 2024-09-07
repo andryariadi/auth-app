@@ -79,6 +79,16 @@ class Controller {
       res.status(500).json({ message: "Internal server error!" });
     }
   }
+
+  static async logout(req, res) {
+    try {
+      res.clearCookie("authToken");
+      res.status(200).json({ success: true, message: "Logged out successfully!" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Internal server error!" });
+    }
+  }
 }
 
 export default Controller;
