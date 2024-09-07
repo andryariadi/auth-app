@@ -11,4 +11,6 @@ router.post("/logout", Controller.logout);
 
 router.post("/verify-email", Controller.verifyEmail);
 
+router.post("/forgot-password", Controller.forgotPassword);
+
 export default router;
