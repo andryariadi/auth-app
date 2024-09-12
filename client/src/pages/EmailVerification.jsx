@@ -1,8 +1,52 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const EmailVerificationPage = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const inputRef = useRef([]);
+  const navigate = useNavigate();
+
+  const hanleChange = (index, value) => {
+    const newCode = [...code];
+
+    if (value.length > 1) {
+      const pastedCode = value.slice(0, 6).split("");
+      for (let i = 0; i < pastedCode.length; i++) {
+        newCode[i] = pastedCode[i];
+      }
+      setCode(newCode);
+
+      // Focus on the last non-empty input or the first empty one
+      const lastFilledIndex = newCode.findLastIndex((digit) => digit !== "");
+      const focusIndex = lastFilledIndex < 5 ? lastFilledIndex + 1 : 5;
+      inputRef.current[focusIndex].focus();
+    } else {
+      newCode[index] = value;
+      setCode(newCode);
+      // Move focus to the next input field if value is entered
+      if (value && index < 5) {
+        inputRef.current[index + 1].focus();
+      }
+    }
+  };
+
+  const handleKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !code[index] && index > 0) {
+      inputRef.current[index - 1].focus();
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
+  // Auto submit when all fields are filled
+  useEffect(() => {
+    if (code.every((digit) => digit !== "")) {
+      handleSubmit(new Event("submit"));
+    }
+  }, [code]);
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-full max-w-md bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
       <div className="p-8 flex flex-col gap-6">
@@ -10,10 +54,19 @@ const EmailVerificationPage = () => {
 
         <span className="text-sm text-center text-gray-400">Enter the 6-digit code sent to your email address</span>
 
-        <form action="" className="flex flex-col gap-6">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div className="bg-violt-500 bg-ros-500 flex items-center justify-between">
             {code.map((digit, index) => (
-              <input key={index} type="text" maxLength="6" value={digit} className="size-12 text-center text-2xl font-bold bg-gray-700 text-white border-2 border-gray-600 rounded-lg focus:border-green-500 focus:outline-none" />
+              <input
+                key={index}
+                ref={(el) => (inputRef.current[index] = el)}
+                type="text"
+                maxLength="6"
+                value={digit}
+                onChange={(e) => hanleChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                className="size-12 text-center text-2xl font-bold bg-gray-700 text-white border-2 border-gray-600 rounded-lg focus:border-green-500 focus:outline-none"
+              />
             ))}
           </div>
 

@@ -65,7 +65,7 @@ const SignupPage = () => {
       <div className="bg-gray-800 bg-opacity-50 px-8 py-4 text-sm">
         <p className="text-center text-gray-400">
           Already have an account?
-          <Link to="/login" className="text-emerald-500 ml-2 inline-block hover:scale-110 transition-all duration-300">
+          <Link to="/login" className="text-green-500 ml-2 inline-block hover:scale-110 transition-all duration-300">
             Login
           </Link>
         </p>

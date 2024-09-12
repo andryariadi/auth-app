@@ -6,8 +6,11 @@ import { PiEye } from "react-icons/pi";
 import { RiEyeCloseFill } from "react-icons/ri";
 import { Lock } from "lucide-react";
 import { useState } from "react";
+import { BiLoaderCircle } from "react-icons/bi";
 
 const LoginPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [openPass, setOpenPass] = useState(false);
   const [input, setInput] = useState({
     email: "",
@@ -44,7 +47,7 @@ const LoginPage = () => {
           </div>
 
           <div>
-            <Link to="/forgot-password" className="text-emerald-500 text-sm inline-block hover:scale-105 transition-all duration-300">
+            <Link to="/forgot-password" className="text-green-500 text-sm inline-block hover:scale-105 transition-all duration-300">
               Forgot Password?
             </Link>
           </div>
@@ -54,15 +57,16 @@ const LoginPage = () => {
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
+            disabled={isLoading}
           >
-            Login
+            {isLoading ? <BiLoaderCircle size={22} className="animate-spin mx-auto" /> : "Login"}
           </motion.button>
         </form>
       </div>
       <div className="bg-gray-800 bg-opacity-50 px-8 py-4 text-sm">
         <p className="text-center text-gray-400">
-          Dont have an account?
-          <Link to="/signup" className="text-emerald-500 ml-2 inline-block hover:scale-110 transition-all duration-300">
+          Don't have an account?
+          <Link to="/signup" className="text-green-500 ml-2 inline-block hover:scale-110 transition-all duration-300">
             Signup
           </Link>
         </p>
