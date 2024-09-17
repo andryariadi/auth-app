@@ -9,6 +9,13 @@ import { Link, useNavigate } from "react-router-dom";
 import PasswordStrength from "../components/PasswordStrength";
 import useAuthStore from "../store/auth.store";
 import { TbLoader } from "react-icons/tb";
+import toast from "react-hot-toast";
+
+const toastStyle = {
+  borderRadius: "10px",
+  background: "#333",
+  color: "#fff",
+};
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -33,13 +40,21 @@ const SignupPage = () => {
     e.preventDefault();
     try {
       await signup(input);
-      console.log(input, "<---disignup");
+      toast.success("Account created successfully!", {
+        style: {
+          toastStyle,
+        },
+      });
       navigate("/verify-email");
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.message, {
+        style: {
+          toastStyle,
+        },
+      });
     }
   };
-  console.log(input, "<---disignup");
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-full max-w-md bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">

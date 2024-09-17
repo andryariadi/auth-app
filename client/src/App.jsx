@@ -6,6 +6,7 @@ import EmailVerificationPage from "./pages/EmailVerification";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPassword";
 import DashboardPage from "./pages/Dashboard";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
           <Route path="/" element={<DashboardPage />} />
         </Routes>
+        <Toaster position="top-right" />
       </main>
     </>
   );

@@ -1,11 +1,22 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../store/auth.store";
+import toast from "react-hot-toast";
+import { TbLoader } from "react-icons/tb";
+
+const toastStyle = {
+  borderRadius: "10px",
+  background: "#333",
+  color: "#fff",
+};
 
 const EmailVerificationPage = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const inputRef = useRef([]);
   const navigate = useNavigate();
+
+  const { verifyEmail, error, isLoading } = useAuthStore();
 
   const hanleChange = (index, value) => {
     const newCode = [...code];
@@ -37,8 +48,27 @@ const EmailVerificationPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const codeString = code.join("");
+
+    try {
+      await verifyEmail(codeString);
+      navigate("/login");
+      toast.success("Email verified successfully!", {
+        style: {
+          toastStyle,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message, {
+        style: {
+          toastStyle,
+        },
+      });
+    }
   };
 
   // Auto submit when all fields are filled
@@ -70,13 +100,16 @@ const EmailVerificationPage = () => {
             ))}
           </div>
 
+          {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+
           <motion.button
             className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300"
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
+            disabled={isLoading}
           >
-            Verify Email
+            {isLoading ? <TbLoader size={22} className="animate-spin mx-auto" /> : "Verify Email"}
           </motion.button>
         </form>
       </div>
