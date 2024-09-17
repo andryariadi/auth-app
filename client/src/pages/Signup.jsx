@@ -5,13 +5,18 @@ import { RiEyeCloseFill } from "react-icons/ri";
 import { IoMailOutline } from "react-icons/io5";
 import { PiEye } from "react-icons/pi";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PasswordStrength from "../components/PasswordStrength";
+import useAuthStore from "../store/auth.store";
+import { TbLoader } from "react-icons/tb";
 
 const SignupPage = () => {
+  const navigate = useNavigate();
+  const { signup, error, isLoading } = useAuthStore();
+
   const [openPass, setOpenPass] = useState(false);
   const [input, setInput] = useState({
-    fullname: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -24,6 +29,16 @@ const SignupPage = () => {
     }));
   };
 
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    try {
+      await signup(input);
+      console.log(input, "<---disignup");
+      navigate("/verify-email");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   console.log(input, "<---disignup");
 
   return (
@@ -31,9 +46,9 @@ const SignupPage = () => {
       <div className="p-8 flex flex-col gap-5">
         <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">Create Account</h2>
 
-        <form action="" className="flex flex-col gap-6">
+        <form onSubmit={handleSignup} className="flex flex-col gap-6">
           <div className="bg-ros-500 flex flex-col gap-4">
-            <InputField icon={<UserRound size={22} />} type="text" placeholder="Fullname" name="fullname" value={input.fullname} onChange={handleChange} />
+            <InputField icon={<UserRound size={22} />} type="text" placeholder="Username" name="username" value={input.username} onChange={handleChange} />
 
             <InputField icon={<IoMailOutline size={22} />} type="email" placeholder="Email" name="email" value={input.email} onChange={handleChange} />
 
@@ -50,6 +65,8 @@ const SignupPage = () => {
             />
           </div>
 
+          {error && <p className="text-red-500">{error}</p>}
+
           <PasswordStrength password={input.password} />
 
           <motion.button
@@ -57,8 +74,9 @@ const SignupPage = () => {
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
+            disabled={isLoading}
           >
-            Signup
+            {isLoading ? <TbLoader scale={22} className="animate-spin mx-auto" /> : "Sign Up"}
           </motion.button>
         </form>
       </div>

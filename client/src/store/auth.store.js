@@ -3,6 +3,8 @@ import { create } from "zustand";
 
 const API_URL = "http://localhost:5000/api/auth";
 
+axios.defaults.withCredentials = true;
+
 const useAuthStore = create((set) => ({
   user: null,
   isAuthenticated: false,
@@ -10,7 +12,9 @@ const useAuthStore = create((set) => ({
   isLoading: false,
   isCheckingAuth: true,
 
-  signup: async (fullname, email, password) => {
+  signup: async ({ username, email, password }) => {
+    console.log(username, email, password, "<---disignupprops");
+
     set({
       isLoading: true,
       error: null,
@@ -18,10 +22,12 @@ const useAuthStore = create((set) => ({
 
     try {
       const res = await axios.post(`${API_URL}/signup`, {
-        fullname,
+        username,
         email,
         password,
       });
+
+      console.log(res.data.user, "<---disignupstore");
 
       set({
         user: res.data.user,
