@@ -30,15 +30,13 @@ const RedirectAuthenticatedUser = ({ children }) => {
 };
 
 function App() {
-  const { chackAuth, isCheckingAuth, isAuthenticated, user } = useAuthStore();
+  const { chackAuth, isCheckingAuth } = useAuthStore();
 
   useEffect(() => {
     chackAuth();
   }, [chackAuth]);
 
   if (isCheckingAuth) return <LoadingSpinner />;
-
-  console.log({ isAuthenticated, user });
 
   return (
     <>
@@ -65,8 +63,22 @@ function App() {
             }
           />
           <Route path="/verify-email" element={<EmailVerificationPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+          <Route
+            path="/forgot-password"
+            element={
+              <RedirectAuthenticatedUser>
+                <ForgotPasswordPage />
+              </RedirectAuthenticatedUser>
+            }
+          />
+          <Route
+            path="/reset-password/:token"
+            element={
+              <RedirectAuthenticatedUser>
+                <ResetPasswordPage />
+              </RedirectAuthenticatedUser>
+            }
+          />
           <Route
             path="/"
             element={

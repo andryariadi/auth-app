@@ -143,7 +143,7 @@ class Controller {
 
       await sendResetPasswordEmail(user.email, `${process.env.CLIENT_URL}/${resetToken}`);
 
-      res.status(200).json({ success: true, message: "Reset password email sent successfully!" });
+      res.status(200).json({ success: true, message: "Password reset link sent to your email successfully!" });
     } catch (error) {
       console.log(error);
       res.status(400).json({ success: false, message: error.message });
