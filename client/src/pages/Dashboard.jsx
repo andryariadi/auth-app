@@ -4,9 +4,18 @@ import { formatDate } from "../helper/date";
 import { HiUser } from "react-icons/hi2";
 import { IoIosMail } from "react-icons/io";
 import { BiLoaderCircle } from "react-icons/bi";
-
+import { IoMdLogOut } from "react-icons/io";
+import toast from "react-hot-toast";
+import { toastStyle } from "../helper/toastStyle";
 const DashboardPage = () => {
-  const { user } = useAuthStore();
+  const { user, isLoading, logout } = useAuthStore();
+
+  const handleLogout = () => {
+    logout();
+    toast.success("Logout successfully!", {
+      style: toastStyle,
+    });
+  };
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -50,16 +59,25 @@ const DashboardPage = () => {
           </div>
         </motion.div>
 
-        <motion.button
-          className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300"
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.95 }}
-          type="submit"
-          // disabled={isLoading}
-        >
-          {/* {isLoading ? <BiLoaderCircle size={22} className="animate-spin mx-auto" /> : "Login"} */}
-          Logout
-        </motion.button>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+          <motion.button
+            className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300"
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.95 }}
+            type="submit"
+            disabled={isLoading}
+            onClick={handleLogout}
+          >
+            {isLoading ? (
+              <BiLoaderCircle size={22} className="animate-spin mx-auto" />
+            ) : (
+              <div className="flex items-center justify-center gap-2">
+                <IoMdLogOut size={22} />
+                <span>Logout</span>
+              </div>
+            )}
+          </motion.button>
+        </motion.div>
       </div>
     </motion.div>
   );

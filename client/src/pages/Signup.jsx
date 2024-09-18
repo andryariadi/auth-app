@@ -10,12 +10,7 @@ import PasswordStrength from "../components/PasswordStrength";
 import useAuthStore from "../store/auth.store";
 import { TbLoader } from "react-icons/tb";
 import toast from "react-hot-toast";
-
-const toastStyle = {
-  borderRadius: "10px",
-  background: "#333",
-  color: "#fff",
-};
+import { toastStyle } from "../helper/toastStyle";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -41,17 +36,13 @@ const SignupPage = () => {
     try {
       await signup(input);
       toast.success("Account created successfully!", {
-        style: {
-          toastStyle,
-        },
+        style: toastStyle,
       });
       navigate("/verify-email");
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message, {
-        style: {
-          toastStyle,
-        },
+        style: toastStyle,
       });
     }
   };

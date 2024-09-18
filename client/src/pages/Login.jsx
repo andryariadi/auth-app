@@ -9,10 +9,10 @@ import { useState } from "react";
 import { BiLoaderCircle } from "react-icons/bi";
 import useAuthStore from "../store/auth.store";
 import toast from "react-hot-toast";
+import { toastStyle } from "../helper/toastStyle";
 
 const LoginPage = () => {
   const [openPass, setOpenPass] = useState(false);
-  // const navigate = useNavigate();
   const { login, isLoading, error } = useAuthStore();
 
   const [input, setInput] = useState({
@@ -30,27 +30,10 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      await login(input);
-      toast.success("Login successfully!", {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
-      // navigate("/");
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response, {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
-    }
+    await login(input);
+    toast.success("Login successfully!", {
+      style: toastStyle,
+    });
   };
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-full max-w-md bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">

@@ -4,12 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/auth.store";
 import toast from "react-hot-toast";
 import { TbLoader } from "react-icons/tb";
-
-const toastStyle = {
-  borderRadius: "10px",
-  background: "#333",
-  color: "#fff",
-};
+import { toastStyle } from "../helper/toastStyle";
 
 const EmailVerificationPage = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
@@ -57,16 +52,12 @@ const EmailVerificationPage = () => {
       await verifyEmail(codeString);
       navigate("/login");
       toast.success("Email verified successfully!", {
-        style: {
-          toastStyle,
-        },
+        style: toastStyle,
       });
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message, {
-        style: {
-          toastStyle,
-        },
+        style: toastStyle,
       });
     }
   };
