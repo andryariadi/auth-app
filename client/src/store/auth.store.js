@@ -47,6 +47,7 @@ const useAuthStore = create((set) => ({
 
       set({
         user: res.data.user,
+        isAuthenticated: true,
         error: null,
         isLoading: false,
       });
@@ -82,6 +83,7 @@ const useAuthStore = create((set) => ({
   },
 
   chackAuth: async () => {
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
     set({ isCheckingAuth: true, error: null });
 
     try {

@@ -9,6 +9,7 @@ import DashboardPage from "./pages/Dashboard";
 import { Toaster } from "react-hot-toast";
 import useAuthStore from "./store/auth.store";
 import { useEffect } from "react";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -34,6 +35,8 @@ function App() {
   useEffect(() => {
     chackAuth();
   }, [chackAuth]);
+
+  if (isCheckingAuth) return <LoadingSpinner />;
 
   console.log({ isAuthenticated, user });
 

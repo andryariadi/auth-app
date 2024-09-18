@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import InputField from "../components/InputField";
 import { IoMailOutline } from "react-icons/io5";
 import { PiEye } from "react-icons/pi";
@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [openPass, setOpenPass] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { login, isLoading, error } = useAuthStore();
 
   const [input, setInput] = useState({
